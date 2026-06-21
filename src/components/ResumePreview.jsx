@@ -1,68 +1,61 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-const downloadPDF=()=>{
 
-const input=document.getElementById("resume");
+function ResumePreview({ resume }) {
+  const downloadPDF = () => {
+    const input = document.getElementById("resume");
 
-html2canvas(input).then((canvas)=>{
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
 
-const imgData=canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
 
-const pdf=new jsPDF();
+      const imgWidth = 210; // A4 width
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-pdf.addImage(imgData,"PNG",0,0);
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save("resume.pdf");
+    });
+  };
 
-pdf.save("resume.pdf");
+  return (
+    <div id="resume">
+      <h2 className="resume-name">{resume.name}</h2>
 
-})
+      <p>{resume.email}</p>
 
-}
-function ResumePreview({resume}){
+      <p>{resume.phone}</p>
 
-return(
+      <h3>Skills</h3>
+      <p>{resume.skills}</p>
 
-<div id="resume">
+      <h3>Education</h3>
+      <p>{resume.education}</p>
 
-<h2>{resume.name}</h2>
+      <hr />
 
-<p>{resume.email}</p>
+      {/* Your Details */}
+      <h4>Anshika Verma</h4>
 
-<p>{resume.phone}</p>
+      <p>anshikaworkspace2006@gmail.com</p>
 
-<h3>Skills</h3>
+      {/* Digital Heroes Button */}
+      <div className="buttons">
+  <a
+    href="https://digitalheroesco.com"
+    target="_blank"
+    rel="noreferrer"
+  >
+    <button>Built for Digital Heroes</button>
+  </a>
 
-<p>{resume.skills}</p>
-
-<h3>Education</h3>
-
-<p>{resume.education}</p>
-
-<hr/>
-
-<h4>
-Anshika Verma
-</h4>
-
-<p>
-your-email@gmail.com
-</p>
-
-<a
-href="https://digitalheroesco.com"
-target="_blank"
->
-<button>
-Built for Digital Heroes
-</button>
-<button onClick={downloadPDF}>
-Download PDF
-</button>
-</a>
-
+  <button onClick={downloadPDF}>
+    Download PDF
+  </button>
 </div>
-
-)
-
+    </div>
+  );
 }
 
 export default ResumePreview;
